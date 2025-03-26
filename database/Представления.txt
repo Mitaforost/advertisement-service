@@ -1,0 +1,26 @@
+-- Популярные объявления (по количеству просмотров)
+CREATE OR REPLACE VIEW popular_ads AS
+SELECT 
+    ads.id, 
+    ads.title, 
+    ads.price, 
+    COALESCE(COUNT(ad_views.id), 0) AS views -- предотвращает NULL, если у объявления нет просмотров
+FROM ads
+LEFT JOIN ad_views ON ads.id = ad_views.ad_id
+GROUP BY ads.id, ads.title, ads.price
+ORDER BY views DESC;
+
+-- Последние сообщения пользователей (по убыванию времени отправки)
+CREATE OR REPLACE VIEW latest_messages AS
+SELECT 
+    m.id, 
+    m.sender_id, 
+    sender.username AS sender_name,
+    m.receiver_id, 
+    receiver.username AS receiver_name, -- добавил имя получателя для удобства
+    m.content, 
+    m.sent_at
+FROM messages m
+JOIN users sender ON m.sender_id = sender.id
+JOIN users receiver ON m.receiver_id = receiver.id
+ORDER BY m.sent_at DESC;
