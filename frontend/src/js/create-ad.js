@@ -47,9 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
             category_id: formData.get("category"),
             price: formData.get("price"),
             location: formData.get("location"),
-            imageUrl: formData.get("imageUrl") // Добавим ссылку на изображение в объект данных
         };
 
+        // Сначала создаем объявление
         fetch('http://127.0.0.1:5000/ads', {
             method: 'POST',
             headers: {
@@ -61,6 +61,34 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(data => {
                 if (data.id) {
                     alert("Объявление успешно создано!");
+
+                    // Затем отправляем изображение объявления
+                    const imageUrl = formData.get("imageUrl");
+                    if (imageUrl) {
+                        fetch('http://127.0.0.1:5000/ad_images', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                ad_id: data.id,
+                                image_url: imageUrl
+                            }),
+                        })
+                            .then(response => response.json())
+                            .then(imageData => {
+                                if (imageData.id) {
+                                    alert("Изображение успешно добавлено!");
+                                } else {
+                                    alert("Ошибка при добавлении изображения.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Ошибка при добавлении изображения:', error);
+                                alert("Ошибка при добавлении изображения.");
+                            });
+                    }
+
                     createAdForm.reset(); // Очистка формы
                 } else {
                     alert("Ошибка при создании объявления.");

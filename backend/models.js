@@ -35,9 +35,27 @@ const Ad = sequelize.define('Ad', {
 }, { tableName: 'ads', timestamps: false });
 
 const AdImage = sequelize.define('AdImage', {
-    ad_id: { type: DataTypes.INTEGER, allowNull: false },
-    image_url: { type: DataTypes.STRING(255), allowNull: false },
-}, { tableName: 'ad_images', timestamps: false });
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    ad_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'ads',
+            key: 'id'
+        }
+    },
+    image_url: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    }
+}, {
+    tableName: 'ad_images',
+    timestamps: false
+});
 
 const Message = sequelize.define('Message', {
     sender_id: { type: DataTypes.INTEGER, allowNull: false },

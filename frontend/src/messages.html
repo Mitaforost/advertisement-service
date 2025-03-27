@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    @@include('html/head.html')
+</head>
+<body>
+@@include('html/header.html')
+<div class="sidebar">
+    <nav class="sidebar__nav">
+        <ul>
+            <li><a href="create-ad.html" class="btn">Создать объявление</a></li>
+            <li><a href="my-ads.html" class="btn">Мои объявления</a></li>
+            <li><a href="favorites.html" class="btn">Избранные</a></li>
+            <li><a href="messages.html" class="btn">Сообщения</a></li>
+        </ul>
+    </nav>
+</div>
+<main class="main">
+    <div class="container">
+        <section class="chat">
+            <h2 class="chat__title">Чат</h2>
+            <div class="chat__users">
+                <ul id="userList" class="chat__users-list">
+                    <!-- Users will be dynamically populated here -->
+                </ul>
+            </div>
+            <div class="chat__messages">
+                <div id="messageList" class="chat__messages-list">
+                    <!-- Messages will be dynamically populated here -->
+                </div>
+                <div class="chat__input">
+                    <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                    <button id="sendMessageButton" class="btn">Отправить</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<div id="logoutPopup" class="popup">
+    <div class="popup__content">
+        <p>Вы уверены, что хотите выйти?</p>
+        <button id="confirmLogout" class="btn">Да</button>
+        <button id="cancelLogout" class="btn">Отмена</button>
+    </div>
+</div>
+@@include('html/footer.html')
+<script src="js/messages.js"></script>
+</body>
+</html>

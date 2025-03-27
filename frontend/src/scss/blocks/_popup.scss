@@ -22,30 +22,6 @@
       font-size: 1.25rem;
       color: #333;
     }
-
-    button {
-      padding: 0.75rem 1.5rem;
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      text-align: center;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #c82333;
-      }
-
-      &:last-of-type {
-        background-color: #6c757d;
-        margin-left: 1rem;
-
-        &:hover {
-          background-color: #5a6268;
-        }
-      }
-    }
   }
 
   &.active {

@@ -108,14 +108,24 @@ app.post('/register', async (req, res) => {
 // AD ROUTES
 app.get('/ads', async (req, res) => {
     try {
-        const ads = await Ad.findAll();
+        const { category_id } = req.query;
+        const whereCondition = category_id ? { category_id } : {};
+
+        const ads = await Ad.findAll({ where: whereCondition });
         return res.json(ads);
     } catch (error) {
         console.error('Error fetching ads:', error);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
+app.get('/ads/:id', async (req, res) => {
+    const adId = req.params.id;
+    const ad = await Ad.findByPk(adId);
+    if (!ad) {
+        return res.status(404).json({ error: "Ad not found" });
+    }
+    return res.json(ad);
+});
 app.post('/ads', async (req, res) => {
     try {
         const newAd = await Ad.create(req.body);
@@ -129,7 +139,7 @@ app.post('/ads', async (req, res) => {
 app.put('/ads/:id', async (req, res) => {
     try {
         const adId = req.params.id;
-        const { user_id, title, description, category_id, price, location } = req.body;
+        const { user_id, title, description, category_id, price, location, image_url } = req.body;
 
         const ad = await Ad.findByPk(adId);
         if (!ad) {
@@ -137,6 +147,14 @@ app.put('/ads/:id', async (req, res) => {
         }
 
         await ad.update({ user_id, title, description, category_id, price, location });
+
+        // Обновление ссылки на изображение
+        const adImage = await AdImage.findOne({ where: { ad_id: adId } });
+        if (adImage) {
+            await adImage.update({ image_url });
+        } else {
+            await AdImage.create({ ad_id: adId, image_url });
+        }
 
         return res.status(200).json(ad);
     } catch (error) {
@@ -217,10 +235,44 @@ app.delete('/categories/:id', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
-// MESSAGES ROUTES
-app.get('/messages', async (req, res) => {
+// Маршрут для отправки сообщений
+app.post('/messages', async (req, res) => {
     try {
-        const messages = await Message.findAll();
+        const { sender_id, receiver_id, ad_id, content } = req.body;
+
+        if (!sender_id || !receiver_id || !ad_id || !content) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const newMessage = await Message.create({
+            sender_id,
+            receiver_id,
+            ad_id,
+            content,
+            sent_at: new Date(),
+            is_read: false
+        });
+
+        res.status(201).json(newMessage);
+    } catch (error) {
+        console.error('Error creating message:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Маршрут для получения сообщений между двумя пользователями
+app.get('/messages/:userId/:otherUserId', async (req, res) => {
+    try {
+        const { userId, otherUserId } = req.params;
+        const messages = await Message.findAll({
+            where: {
+                [Op.or]: [
+                    { sender_id: userId, receiver_id: otherUserId },
+                    { sender_id: otherUserId, receiver_id: userId }
+                ]
+            },
+            order: [['sent_at', 'ASC']]
+        });
         return res.json(messages);
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -228,28 +280,18 @@ app.get('/messages', async (req, res) => {
     }
 });
 
-app.post('/messages', async (req, res) => {
-    try {
-        const newMessage = await Message.create(req.body);
-        return res.status(201).json(newMessage);
-    } catch (error) {
-        console.error('Error creating message:', error);
-        return res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
+// Маршрут для обновления сообщения
 app.put('/messages/:id', async (req, res) => {
     try {
         const messageId = req.params.id;
         const { sender_id, receiver_id, ad_id, content, is_read } = req.body;
-
         const message = await Message.findByPk(messageId);
+
         if (!message) {
             return res.status(404).json({ error: "Message not found" });
         }
 
         await message.update({ sender_id, receiver_id, ad_id, content, is_read });
-
         return res.status(200).json(message);
     } catch (error) {
         console.error('Error updating message:', error);
@@ -257,11 +299,12 @@ app.put('/messages/:id', async (req, res) => {
     }
 });
 
+// Маршрут для удаления сообщения
 app.delete('/messages/:id', async (req, res) => {
     try {
         const messageId = req.params.id;
-
         const message = await Message.findByPk(messageId);
+
         if (!message) {
             return res.status(404).json({ error: "Message not found" });
         }
@@ -273,6 +316,8 @@ app.delete('/messages/:id', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+// Маршрут для получения входящих сообщений пользователя
 app.get('/messages/inbox/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
@@ -283,6 +328,8 @@ app.get('/messages/inbox/:userId', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+// Маршрут для получения отправленных сообщений пользователя
 app.get('/messages/sent/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
@@ -310,6 +357,13 @@ app.get('/ad_images', async (req, res) => {
 
 app.post('/ad_images', async (req, res) => {
     try {
+        console.log('Received request data:', req.body); // Логирование данных запроса
+
+        // Проверка обязательных полей
+        if (!req.body.ad_id || !req.body.image_url) {
+            return res.status(400).json({ error: "ad_id and image_url are required" });
+        }
+
         const newAdImage = await AdImage.create(req.body);
         return res.status(201).json(newAdImage);
     } catch (error) {
@@ -317,7 +371,6 @@ app.post('/ad_images', async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 app.put('/ad_images/:id', async (req, res) => {
     try {
         const adImageId = req.params.id;

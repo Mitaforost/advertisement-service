@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Функция для загрузки объявлений пользователя
+    // Функция для загрузки объявлений пользователя
     function loadMyAds() {
         fetch('http://127.0.0.1:5000/ads')
             .then(response => response.json())
@@ -55,14 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             const adItem = document.createElement('li');
                             adItem.classList.add('ad-item');
                             adItem.innerHTML = `
-                                <h3>${ad.title}</h3>
-                                <p>${ad.description}</p>
-                                <p><strong>Цена:</strong> ${ad.price} руб.</p>
-                                <p><strong>Местоположение:</strong> ${ad.location}</p>
-                                ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" width="100">` : '<p>Нет изображения</p>'}
-                                <button class="edit-ad btn" data-id="${ad.id}">Редактировать</button>
-                                <button class="delete-ad btn" data-id="${ad.id}">Удалить</button>
-                            `;
+                            <h3>${ad.title}</h3>
+                            <p>${ad.description}</p>
+                            <p><strong>Цена:</strong> ${ad.price} руб.</p>
+                            <p><strong>Местоположение:</strong> ${ad.location}</p>
+                            ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" width="100">` : '<p>Нет изображения</p>'}
+                            <button class="edit-ad btn" data-id="${ad.id}">Редактировать</button>
+                            <button class="delete-ad btn" data-id="${ad.id}">Удалить</button>
+                        `;
                             myAdsList.appendChild(adItem);
 
                             // Добавление обработчиков событий для кнопок редактирования и удаления
@@ -136,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
             category_id: editCategorySelect.value,
             price: editPriceInput.value,
             location: editLocationInput.value,
-            imageUrl: editImageUrlInput.value
+            image_url: editImageUrlInput.value  // исправлено
         };
 
         fetch(`http://127.0.0.1:5000/ads/${adId}`, {

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    @@include('html/head.html')
+    <title>Избранные</title>
+</head>
+<body>
+@@include('html/header.html')
+<div class="sidebar">
+    <nav class="sidebar__nav">
+        <ul>
+            <li><a href="create-ad.html" class="btn">Создать объявление</a></li>
+            <li><a href="my-ads.html" class="btn">Мои объявления</a></li>
+            <li><a href="favorites.html" class="btn">Избранные</a></li>
+            <li><a href="messages.html" class="btn">Сообщения</a></li>
+        </ul>
+    </nav>
+</div>
+<main class="main">
+    <div class="container">
+        <section class="ads">
+            <h2 class="ads__title">Избранные объявления</h2>
+            <ul class="ads__list"></ul>
+        </section>
+    </div>
+</main>
+<div id="logoutPopup" class="popup">
+    <div class="popup__content">
+        <p>Вы уверены, что хотите выйти?</p>
+        <button id="confirmLogout" class="btn">Да</button>
+        <button id="cancelLogout" class="btn">Отмена</button>
+    </div>
+</div>
+@@include('html/footer.html')
+<script src="js/favorites.js"></script>
+</body>
+</html>
