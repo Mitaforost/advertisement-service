@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    @@include('html/head.html')
+</head>
+<body>
+@@include('html/header.html')
+<div class="sidebar">
+    <nav class="sidebar__nav">
+        <ul>
+            <li><a href="create-ad.html" class="btn">Создать объявление</a></li>
+            <li><a href="my-ads.html" class="btn">Мои объявления</a></li>
+            <li><a href="favorites.html" class="btn">Избранные</a></li>
+            <li><a href="messages.html" class="btn">Сообщения</a></li>
+            <li><a href="profile.html" class="btn">Личный кабинет</a></li>
+            <li><a href="popular-ads.html" class="btn">Популярные объявления</a></li>
+        </ul>
+    </nav>
+</div>
+<main class="main">
+    <div class="container">
+        <section class="my-ads">
+            <h2 class="my-ads__title">Мои объявления</h2>
+            <ul class="my-ads__list">
+                <!-- Объявления будут загружены сюда через JavaScript -->
+            </ul>
+        </section>
+        <section class="edit-ad" style="display:none;">
+            <h2 class="edit-ad__title">Редактировать объявление</h2>
+            <form id="editAdForm" class="edit-ad__form">
+                <input type="hidden" id="editAdId" name="adId">
+                <div class="form-group">
+                    <label for="editTitle">Заголовок</label>
+                    <input type="text" id="editTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Описание</label>
+                    <textarea id="editDescription" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Категория</label>
+                    <select id="editCategory" name="category" required>
+                        <!-- Категории будут загружены через JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Цена</label>
+                    <input type="number" id="editPrice" name="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="editLocation">Местоположение</label>
+                    <input type="text" id="editLocation" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="editImageUrl">Ссылка на изображение</label>
+                    <input type="url" id="editImageUrl" name="imageUrl" required>
+                </div>
+                <button type="submit" class="btn">Сохранить</button>
+            </form>
+        </section>
+    </div>
+</main>
+<div id="logoutPopup" class="popup">
+    <div class="popup__content">
+        <p>Вы уверены, что хотите выйти?</p>
+        <button id="confirmLogout">Да</button>
+        <button id="cancelLogout">Отмена</button>
+    </div>
+</div>
+@@include('html/footer.html')
+<script src="js/my-ads.js"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 .header{
   padding: 20px 0;
-  background-color: $header-bg;
+  background-color: transparent;
   &__home{
     h1{
-      color: $main-color;
+      color: $text-color;
       &:hover{
         color: $success-color;
       }
@@ -21,7 +21,7 @@
     flex-wrap: wrap;
     gap: 20px;
     a{
-      color: $main-color;
+      color: $text-color;
       &:hover{
         color: $success-color;
       }
@@ -29,12 +29,17 @@
   }
   &__user{
     display: flex;
-    gap: 20px;
-    margin-left: auto;
     align-items: center;
+    width: 100%;
+    justify-content: space-between;
     p{
       font-size: 22px;
-      color: $main-color;
+      color: $text-color;
+    }
+    a{
+      align-items: center;
+      display: flex;
+      gap: 20px;
     }
   }
   &__status{

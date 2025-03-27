@@ -65,8 +65,11 @@ a{
 }
 
 @import "blocks/header";
-@import "blocks/overview";
-@import "blocks/orders";
+@import "blocks/sidebar";
+@import "blocks/ads";
+@import "blocks/statistics";
+@import "blocks/create-ad";
+@import "blocks/my-ads";
 
 
 @import "blocks/footer";

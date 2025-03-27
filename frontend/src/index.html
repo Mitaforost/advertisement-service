@@ -1,25 +1,35 @@
 <!doctype html>
 <html lang="ru">
-@@include('html/head.html')
+<head>
+    @@include('html/head.html')
+</head>
 <body>
 @@include('html/header.html')
 <div class="sidebar">
     <nav class="sidebar__nav">
         <ul>
-            <li><a href="inbox.html" class="btn">Входящие</a></li>
-            <li><a href="sent.html" class="btn">Отправленные</a></li>
-            <li><a href="drafts.html" class="btn">Черновики</a></li>
-            <li><a href="trash.html" class="btn">Корзина</a></li>
+            <li><a href="create-ad.html" class="btn">Создать объявление</a></li>
+            <li><a href="my-ads.html" class="btn">Мои объявления</a></li>
             <li><a href="favorites.html" class="btn">Избранные</a></li>
+            <li><a href="messages.html" class="btn">Сообщения</a></li>
+            <li><a href="profile.html" class="btn">Личный кабинет</a></li>
+            <li><a href="popular-ads.html" class="btn">Популярные объявления</a></li>
         </ul>
     </nav>
 </div>
 <main class="main">
     <div class="container">
-        <section class="messages">
-            <h2 class="messages__title">Сообщения</h2>
-            <ul class="messages__list">
+        <section class="ads">
+            <h2 class="ads__title">Объявления</h2>
+            <ul class="ads__list">
+
             </ul>
+        </section>
+        <section class="statistics">
+            <h2 class="statistics__title">Статистика</h2>
+            <div class="statistics__content">
+
+            </div>
         </section>
     </div>
 </main>

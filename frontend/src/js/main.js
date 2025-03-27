@@ -7,35 +7,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const userInfoDiv = document.getElementById("userInfo");
-    const mail = user.user.email;
     const username = user.user.username;
 
+    userInfoDiv.innerHTML = `<p>${username}</p>`;
 
-    userInfoDiv.innerHTML = `<p>${username}, Почта - ${mail}</p>`;
-
-    function loadMessages() {
-        fetch('http://127.0.0.1:5000/messages')
+    function loadAds() {
+        fetch('http://127.0.0.1:5000/ads')
             .then(response => response.json())
             .then(data => {
-                const messagesList = document.querySelector('.messages__list');
-                messagesList.innerHTML = '';
+                const adsList = document.querySelector('.ads__list');
+                adsList.innerHTML = '';
 
-                data.forEach(message => {
-                    const messageItem = document.createElement('li');
-                    messageItem.innerHTML = `
-                        <h3>${message.subject}</h3>
-                        <p>${message.body}</p>
-                        <p><strong>Отправитель:</strong> ${message.sender_id}</p>
-                        <p><strong>Получатель:</strong> ${message.receiver_id}</p>
-                        <p><strong>Статус:</strong> ${message.status}</p>
+                data.forEach(ad => {
+                    const adItem = document.createElement('li');
+                    adItem.innerHTML = `
+                        <h3>${ad.title}</h3>
+                        <p>${ad.description}</p>
+                        <p><strong>Цена:</strong> ${ad.price} руб.</p>
+                        <p><strong>Местоположение:</strong> ${ad.location}</p>
                     `;
-                    messagesList.appendChild(messageItem);
+                    adsList.appendChild(adItem);
                 });
             })
-            .catch(error => console.error('Ошибка при загрузке сообщений:', error));
+            .catch(error => console.error('Ошибка при загрузке объявлений:', error));
     }
 
-    loadMessages();
+    function loadStatistics() {
+        fetch('http://127.0.0.1:5000/statistics')
+            .then(response => response.json())
+            .then(data => {
+                const statisticsContent = document.querySelector('.statistics__content');
+                statisticsContent.innerHTML = `
+                    <p><strong>Количество пользователей:</strong> ${data.userCount}</p>
+                    <p><strong>Количество объявлений:</strong> ${data.adCount}</p>
+                    <p><strong>Количество сообщений:</strong> ${data.messageCount}</p>
+                `;
+            })
+            .catch(error => console.error('Ошибка при загрузке статистики:', error));
+    }
+
+    loadAds();
+    loadStatistics();
 
     const logoutBtn = document.getElementById("logoutBtn");
     const logoutPopup = document.getElementById("logoutPopup");
