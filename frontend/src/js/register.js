@@ -11,8 +11,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const userData = {
         username: name,
         email: email,
-        password: password,
-        role_id: 4 // Автоматически присваиваем роль с ID 3
+        password: password
     };
 
     try {

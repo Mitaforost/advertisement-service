@@ -1,0 +1,66 @@
+.auth-box {
+  margin: 120px auto;
+  width: 380px;
+  padding: 30px;
+  background: $main-color;
+  border-left: 4px solid $border-color;
+  text-align: center;
+}
+
+.auth-heading {
+  color: $text-color;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-group {
+  input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 15px;
+    border: 1px solid $border-color;
+    transition: all 0.3s;
+
+    &:focus {
+      border-color: $success-color;
+      outline: none;
+    }
+  }
+}
+
+.btn {
+  background-color: $primary-color;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+.auth-text {
+  margin-top: 18px;
+  font-size: 13px;
+}
+
+.auth-link {
+  color: $success-color;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

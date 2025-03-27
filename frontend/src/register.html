@@ -1,13 +1,6 @@
 <!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="description" content="Описание cайта">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Почтовый клиент</title>
-</head>
-
+@@include('html/head.html')
 <body>
 <main class="container">
     <section class="auth-box">
@@ -24,15 +17,9 @@
             </div>
             <button type="submit" class="btn">Зарегистрироваться</button>
         </form>
-        <p class="auth-text">Уже есть аккаунт? <a href="login.html" class="auth-link">Войти</a></p>
+        <p class="auth-text"><a href="login.html" class="auth-link">Войти в систему</a></p>
     </section>
 </main>
-<footer class="footer">
-    <div class="container">
-        <p class="footer__title">Почтовый клиент</p>
-    </div>
-</footer>
-
 <script src="js/register.js"></script>
 </body>
 </html>
