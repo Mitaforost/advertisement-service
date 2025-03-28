@@ -47,36 +47,41 @@ document.addEventListener("DOMContentLoaded", () => {
                         const favoriteAdIds = userFavorites.map(favorite => favorite.ad_id);
 
                         data.forEach(ad => {
-                            fetch(`http://127.0.0.1:5000/ad_images?ad_id=${ad.id}`)
+                            fetch(`http://127.0.0.1:5000/users/${ad.user_id}`)
                                 .then(response => response.json())
-                                .then(images => {
-                                    const adImageUrls = images.map(image => image.image_url);
-                                    const adItem = document.createElement('li');
-                                    adItem.innerHTML = `
-                                        <div class="ads__content">
-                                            <h3>${ad.title}</h3>
-                                            <p>${ad.description}</p>
-                                            <p><strong>Цена:</strong> ${ad.price} руб.</p>
-                                            <p><strong>Местоположение:</strong> ${ad.location}</p>
-                                            ${favoriteAdIds.includes(ad.id) ?
-                                        '<p>Добавлено в избранное</p>' :
-                                        `<button class="btn favorite-btn" data-id="${ad.id}">Добавить в избранное</button>`}
-                                        </div>
-                                        ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" class="ad-image">` : '<p>Нет изображения</p>'}
-                                    `;
-                                    adsList.appendChild(adItem);
+                                .then(userData => {
+                                    fetch(`http://127.0.0.1:5000/ad_images?ad_id=${ad.id}`)
+                                        .then(response => response.json())
+                                        .then(images => {
+                                            const adImageUrls = images.map(image => image.image_url);
+                                            const adItem = document.createElement('li');
+                                            adItem.innerHTML = `
+                                                <div class="ads__content">
+                                                    <h3>${ad.title}</h3>
+                                                    <p>${ad.description}</p>
+                                                    <p><strong>Цена:</strong> ${ad.price} руб.</p>
+                                                    <p><strong>Местоположение:</strong> ${ad.location}</p>
+                                                    <p><strong>Автор:</strong> ${userData.username}</p>
+                                                    <p><strong>Создано:</strong> ${new Date(ad.created_at).toLocaleString()}</p>
+                                                    ${favoriteAdIds.includes(ad.id) ?
+                                                '<p>Добавлено в избранное</p>' :
+                                                `<button class="btn favorite-btn" data-id="${ad.id}">Добавить в избранное</button>`}
+                                                </div>
+                                                ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" class="ad-image">` : '<p>Нет изображения</p>'}
+                                            `;
+                                            adsList.appendChild(adItem);
 
-                                    const favButton = adItem.querySelector('.favorite-btn');
-                                    if (favButton) {
-                                        favButton.addEventListener('click', (event) => {
-                                            const adId = event.target.dataset.id;
-                                            addToFavorites(adId, event.target);
-                                        });
-                                    } else {
-                                        console.error('Кнопка не найдена в разметке объявления:', adItem);
-                                    }
+                                            const favButton = adItem.querySelector('.favorite-btn');
+                                            if (favButton) {
+                                                favButton.addEventListener('click', (event) => {
+                                                    const adId = event.target.dataset.id;
+                                                    addToFavorites(adId, event.target);
+                                                });
+                                            }
+                                        })
+                                        .catch(error => console.error('Ошибка при загрузке изображений:', error));
                                 })
-                                .catch(error => console.error('Ошибка при загрузке изображений:', error));
+                                .catch(error => console.error('Ошибка при загрузке пользователя:', error));
                         });
                     })
                     .catch(error => console.error('Ошибка при загрузке избранных объявлений:', error));

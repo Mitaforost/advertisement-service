@@ -38,8 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Ошибка при загрузке категорий:', error));
     }
 
-    // Функция для загрузки объявлений пользователя
-    // Функция для загрузки объявлений пользователя
+// Функция для загрузки объявлений пользователя
     function loadMyAds() {
         fetch('http://127.0.0.1:5000/ads')
             .then(response => response.json())
@@ -47,46 +46,55 @@ document.addEventListener("DOMContentLoaded", () => {
                 myAdsList.innerHTML = '';
                 const userAds = data.filter(ad => ad.user_id === user.user.id);
                 userAds.forEach(ad => {
-                    // Получение ссылок на изображения для объявления
-                    fetch(`http://127.0.0.1:5000/ad_images?ad_id=${ad.id}`)
+                    // Получение данных о пользователе
+                    fetch(`http://127.0.0.1:5000/users/${ad.user_id}`)
                         .then(response => response.json())
-                        .then(images => {
-                            const adImageUrls = images.map(image => image.image_url);
+                        .then(userData => {
+                            // Получение ссылок на изображения для объявления
+                            fetch(`http://127.0.0.1:5000/ad_images?ad_id=${ad.id}`)
+                                .then(response => response.json())
+                                .then(images => {
+                                    const adImageUrls = images.map(image => image.image_url);
 
-                            const adItem = document.createElement('li');
-                            adItem.classList.add('ad-item');
-                            adItem.innerHTML = `
-                            <h3>${ad.title}</h3>
-                            <p>${ad.description}</p>
-                            <p><strong>Цена:</strong> ${ad.price} руб.</p>
-                            <p><strong>Местоположение:</strong> ${ad.location}</p>
-                            ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" width="100">` : '<p>Нет изображения</p>'}
-                            <button class="edit-ad btn" data-id="${ad.id}">Редактировать</button>
-                            <button class="delete-ad btn" data-id="${ad.id}">Удалить</button>
-                        `;
-                            myAdsList.appendChild(adItem);
+                                    const adItem = document.createElement('li');
+                                    adItem.classList.add('ad-item');
+                                    adItem.innerHTML = `
+                                    <h3>${ad.title}</h3>
+                                    <p>${ad.description}</p>
+                                    <p><strong>Цена:</strong> ${ad.price} руб.</p>
+                                    <p><strong>Местоположение:</strong> ${ad.location}</p>
+                                    <p><strong>Создано:</strong> ${new Date(ad.created_at).toLocaleString()}</p>
+                                    <p><strong>Автор:</strong> ${userData.username}</p>
+                                    ${adImageUrls.length > 0 ? `<img src="${adImageUrls[0]}" alt="Изображение объявления" width="100">` : '<p>Нет изображения</p>'}
+                                    <button class="edit-ad btn" data-id="${ad.id}">Редактировать</button>
+                                    <button class="delete-ad btn" data-id="${ad.id}">Удалить</button>
+                                `;
+                                    myAdsList.appendChild(adItem);
 
-                            // Добавление обработчиков событий для кнопок редактирования и удаления
-                            document.querySelectorAll('.edit-ad').forEach(button => {
-                                button.addEventListener('click', (event) => {
-                                    const adId = event.target.dataset.id;
-                                    const ad = userAds.find(ad => ad.id == adId);
-                                    showEditForm(ad, adImageUrls[0]);
-                                });
-                            });
+                                    // Добавление обработчиков событий для кнопок редактирования и удаления
+                                    document.querySelectorAll('.edit-ad').forEach(button => {
+                                        button.addEventListener('click', (event) => {
+                                            const adId = event.target.dataset.id;
+                                            const ad = userAds.find(ad => ad.id == adId);
+                                            showEditForm(ad, adImageUrls[0]);
+                                        });
+                                    });
 
-                            document.querySelectorAll('.delete-ad').forEach(button => {
-                                button.addEventListener('click', (event) => {
-                                    const adId = event.target.dataset.id;
-                                    deleteAd(adId);
-                                });
-                            });
+                                    document.querySelectorAll('.delete-ad').forEach(button => {
+                                        button.addEventListener('click', (event) => {
+                                            const adId = event.target.dataset.id;
+                                            deleteAd(adId);
+                                        });
+                                    });
+                                })
+                                .catch(error => console.error('Ошибка при загрузке изображений:', error));
                         })
-                        .catch(error => console.error('Ошибка при загрузке изображений:', error));
+                        .catch(error => console.error('Ошибка при загрузке пользователя:', error));
                 });
             })
             .catch(error => console.error('Ошибка при загрузке объявлений:', error));
     }
+
 
     // Функция для отображения формы редактирования
     function showEditForm(ad, imageUrl) {

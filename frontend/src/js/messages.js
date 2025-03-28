@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function displayMessages(messages) {
         messageList.innerHTML = '';
+        if (messages.length === 0) {
+            messageList.innerHTML = '<p>Пока что ваша переписка пуста.</p>';
+            return;
+        }
         messages.forEach(message => {
             const messageItem = document.createElement('div');
             messageItem.classList.add('message');
@@ -71,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             receiver_id: selectedUser.id,
             content: content,
             ad_id: 1, // Замените на корректное значение
-            sent_at: new Date().toISOString(), // Добавляем время отправки
-            is_read: false // Сообщение по умолчанию не прочитано
+            sent_at: new Date().toISOString(),
+            is_read: false
         };
 
         try {
@@ -84,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 throw new Error('Error sending message');
             }
-            const newMessage = await response.json();
             messageInput.value = '';
             fetchMessages(currentUser.id, selectedUser.id);
         } catch (error) {
